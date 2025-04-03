@@ -15,7 +15,7 @@
 
 ###
 
-<h1 align="center">hey there 👋</h1>
+<h1 align="center">Shreyash Gurav</h1>
 
 ###
 
@@ -23,7 +23,7 @@
 
 ###
 
-<p align="left">I’m a second-year B.Sc. Information Technology student at Gogate Joglekar College (Autonomous), Ratnagiri. Enthusiastic about coding, web development, and continuously exploring new technologies.<br><br>🛠️ Tech Stack  <br>- Languages: Python, JavaScript, C,  C++,Bootstrap<br>- Frontend: HTML, CSS, JavaScript<br>- Backend: Python, MySQL  <br>- Tools: GitHub, VS Code, IDLE Python, Dev-C++</p>
+<p align="left">I’m a second-year B.Sc. Information Technology student at Gogate Joglekar College (Autonomous), Ratnagiri. Enthusiastic about coding, web development, and continuously exploring new technologies.<br><br>🛠️ Tech Stack  <br>- Languages: Python, JavaScript, C,  C++,Bootstrap<br>- Frontend: HTML, CSS, JavaScript<br>- Backend: Python, MySQL  <br>- Tools: GitHub, VS Code, IDLE Python, Dev-C++<br><br>Gmail: shreyashsgurav10s@gmail.com<br>linkedin: www.linkedin.com/in/shreyash-gurav-b7a528296</p>
 
 ###
 
@@ -49,6 +49,6 @@
 
 ###
 
-<h3 align="left">🔥   My Stats :</h3>
+<h3 align="left">🔥My Stats :<br>Education: B.Sc. Information Technology (2nd year) at Gogate Joglekar College (Autonomous), Ratnagiri.<br>Passions: Enthusiastic about coding, web development, and exploring new technologies.<br>Current Status: Giving 2nd-year final semester exams.</h3>
 
-#### Shreyash09
+###
