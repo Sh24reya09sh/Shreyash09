@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vote Section</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background-color: #9b59b6;
+    }
+
+    .vote-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .party-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      width: 200px;
+    }
+
+    .party-card img {
+      width: 100px;
+      height: 100px;
+      border: 3px solid red;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .vote-btn {
+      background-color: #d4ed00;
+      border: 2px solid black;
+      padding: 8px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .vote-btn:hover {
+      background-color: #c5de00;
+    }
+
+    .back-btn {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-content">
+      <span class="brand">Vote Section</span>
+    </div>
+  </nav>
+
+  <div class="container center">
+    <h2 style="color: white;">Cast Your Vote</h2>
+
+    <div class="vote-container">
+      <div class="party-card">
+        <img src="bjp.png" alt="BJP">
+        <button class="vote-btn" onclick="castVote('BJP')">Vote</button>
+      </div>
+
+      <div class="party-card">
+        <img src="congress.png" alt="Congress">
+        <button class="vote-btn" onclick="castVote('Congress')">Vote</button>
+      </div>
+
+      <div class="party-card">
+        <img src="AAP.png" alt="AAP">
+        <button class="vote-btn" onclick="castVote('AAP')">Vote</button>
+      </div>
+
+      <div class="party-card">
+        <img src="BSP.png" alt="BSP">
+        <button class="vote-btn" onclick="castVote('BSP')">Vote</button>
+      </div>
+    </div>
+
+    <div id="actionButtons" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
+      <button id="backButton" class="back-btn">⬅ Back</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.href = "index.html";
+    }
+
+    function castVote(party) {
+      const voterId = localStorage.getItem("loggedInUser");
+      if (!voterId) {
+        alert("Please log in first.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const hasVoted = localStorage.getItem(`voted_${voterId}`);
+      if (hasVoted) {
+        alert("You have already voted!");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find(u => u.voterId === voterId);
+      if (!user) {
+        alert("User not found!");
+        return;
+      }
+
+      const votes = JSON.parse(localStorage.getItem("votes")) || {};
+      votes[party] = (votes[party] || 0) + 1;
+      localStorage.setItem("votes", JSON.stringify(votes));
+
+      const voteDetails = {
+        voterId: voterId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        party: party,
+        timestamp: new Date().toISOString()
+      };
+
+      const voteRecords = JSON.parse(localStorage.getItem("voteRecords")) || [];
+      voteRecords.push(voteDetails);
+      localStorage.setItem("voteRecords", JSON.stringify(voteRecords));
+
+      localStorage.setItem(`voted_${voterId}`, "true");
+
+      alert(`Your vote for ${party} has been recorded! You will now be logged out.`);
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('backButton').addEventListener('click', function () {
+      window.history.back();
+    });
+  </script>
+</body>
+</html>

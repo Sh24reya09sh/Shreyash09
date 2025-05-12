@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-content">
+      <span class="brand">Digital Voting</span>
+    </div>
+  </nav>
+
+  <div class="container center">
+    <h2>Welcome to the Voter Dashboard</h2>
+    <button class="blue-btn" onclick="location.href='vote.html'">Open Vote Section</button>
+    <button class="blue-btn" onclick="location.href='results.html'">Open Vote Count</button>
+
+    <div id="actionButtons" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+      <button id="backButton" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        ⬅ Back
+      </button>
+      <button id="logoutButton" style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        🔒 Logout
+      </button>
+    </div>
+  </div>
+
+  <script>
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.href = "index.html";
+    }
+    document.getElementById('backButton').addEventListener('click', function () {
+      window.history.back(); 
+    });
+    document.getElementById('logoutButton').addEventListener('click', function () {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html"; 
+    });
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

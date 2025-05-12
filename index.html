@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Voting System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-content">
+      <span class="brand">CodeShape IT Solution</span>
+      <div class="nav-buttons">
+        <span id="navSignIn" class="nav-link blue-text">Sign In</span>
+        <span id="navSignUp" class="nav-link blue-text">Sign Up</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Board of CodeShape IT Solution</h1>
+
+    <div class="login-box" id="loginBox">
+      <div class="login-header">Login to Vote</div>
+      <form id="loginForm" onsubmit="loginUser(event)">
+        <label for="voterId">Voter ID</label>
+        <input type="text" id="voterId" name="voterId" required />
+
+        <label for="voterKey">Voter Key</label>
+        <input type="password" id="voterKey" name="voterKey" required />
+
+        <button type="submit" class="green-btn">Login to Vote</button>
+      </form>
+      <p class="center">
+      <a href="#" id="showSignUp" class="blue-text">Sign Up</a> | 
+        <a href="#" id="adminAccess" class="blue-text">Admin</a>
+      </p>
+    </div>
+
+    <div class="login-box" id="signUpBox" style="display: none;">
+      <div class="login-header">New User Sign Up</div>
+      <form id="signUpForm" onsubmit="registerUser(event)">
+        <label>First Name</label>
+        <input type="text" id="firstName" required />
+        <label>Last Name</label>
+        <input type="text" id="lastName" required />
+        <label>Address</label>
+        <input type="text" id="address" required />
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="">--Select Gender--</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <label>Date of Birth</label>
+        <input type="date" id="dob" required />
+        <label>Upload Aadhaar Card</label>
+        <input type="file" id="aadhaar" accept="image/*" required />
+        <label>Set Your Voter Key</label>
+        <input type="password" id="newVoterKey" required />
+        <button type="submit" class="green-btn">Register</button>
+      </form>
+      <p class="center">
+        Already registered? <a href="#" id="showLogin" class="blue-text">Back to Login</a>
+      </p>
+    </div>
+
+    <div id="successMessage" style="display: none;" class="center">
+      <h2>Your voter ID has been created</h2>
+      <p>Your voter ID is <strong><span id="generatedVoterId"></span></strong></p>
+      <button id="goToLoginBtn" class="blue-btn">Go to Login</button>
+    </div>
+  </div>
+
+  <div id="adminPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); text-align:center; z-index:999;">
+    <div style="background:white; padding:20px; border-radius:8px; display:inline-block; margin-top:100px;">
+      <h3>Admin Access</h3>
+      <input type="password" id="adminPassword" placeholder="Enter Admin Password" style="padding:10px; width:100%; margin-bottom:10px;"/>
+      <br>
+      <button onclick="checkAdminPassword()" style="padding:8px 16px;">Submit</button>
+      <button onclick="closeAdminPopup()" style="padding:8px 16px;">Cancel</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    document.getElementById('navSignIn').addEventListener('click', function () {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('signUpBox').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+    });
+
+    document.getElementById('navSignUp').addEventListener('click', function () {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('signUpBox').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    });
+
+    document.getElementById('showSignUp').addEventListener('click', function () {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('signUpBox').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    });
+
+    document.getElementById('showLogin').addEventListener('click', function () {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('signUpBox').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+    });
+
+    document.getElementById('goToLoginBtn').addEventListener('click', function () {
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('loginBox').style.display = 'block';
+    });
+
+    document.getElementById('adminAccess').addEventListener('click', function() {
+      document.getElementById('adminPopup').style.display = 'block';
+    });
+
+    function closeAdminPopup() {
+      document.getElementById('adminPopup').style.display = 'none';
+    }
+
+    function checkAdminPassword() {
+      const password = document.getElementById('adminPassword').value;
+      if (password === '2409') {
+        window.location.href = 'admin.html';
+      } else {
+        alert('Incorrect admin password');
+      }
+    }
+  </script>
+
+</body>
+</html>

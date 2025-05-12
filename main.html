@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Voting System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    nav {
+      margin-bottom: 20px;
+    }
+    nav button {
+      padding: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    .party-button {
+      display: block;
+      padding: 10px;
+      margin: 10px 0;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 200px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body onload="initPage()">
+
+  <nav>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('vote')">Vote</button>
+    <button onclick="showSection('results')">Results</button>
+    <button onclick="logoutUser()">Logout</button>
+  </nav>
+
+  <!-- Dashboard Section -->
+  <section id="dashboard">
+    <h2>Welcome to the Dashboard</h2>
+    <p>You are logged in as: <span id="user-voter-id"></span></p>
+  </section>
+
+  <!-- Vote Section -->
+  <section id="vote">
+    <h2>Cast Your Vote</h2>
+    <button class="party-button" onclick="vote('Party A')">Vote for Party A</button>
+    <button class="party-button" onclick="vote('Party B')">Vote for Party B</button>
+    <button class="party-button" onclick="vote('Party C')">Vote for Party C</button>
+  </section>
+
+  <!-- Results Section -->
+  <section id="results">
+    <h2>Live Voting Results</h2>
+    <div id="results-output"></div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    function initPage() {
+      checkLogin();
+      showSection('dashboard');
+      document.getElementById("user-voter-id").textContent = localStorage.getItem("loggedInUser");
+      displayResults(); // Pre-load results
+    }
+
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      if (id === "results") displayResults();
+    }
+
+    // Override displayResults() to target #results-output
+    function displayResults() {
+      const resultsDiv = document.getElementById("results-output");
+      const votes = JSON.parse(localStorage.getItem("votes")) || {};
+      const totalVotes = Object.values(votes).reduce((sum, val) => sum + val, 0);
+
+      resultsDiv.innerHTML = "";
+
+      for (const [party, count] of Object.entries(votes)) {
+        const percentage = totalVotes ? ((count / totalVotes) * 100).toFixed(1) : 0;
+        resultsDiv.innerHTML += `
+          <strong>${party}</strong>: ${count} vote(s) (${percentage}%)
+          <div style="background:#ddd;border-radius:4px;">
+            <div style="width:${percentage}%;background:#007bff;color:white;padding:5px;border-radius:4px;">
+              ${percentage}%
+            </div>
+          </div><br/>
+        `;
+      }
+
+      if (totalVotes === 0) {
+        resultsDiv.innerHTML = "<p>No votes recorded yet.</p>";
+      }
+    }
+  </script>
+</body>
+</html>

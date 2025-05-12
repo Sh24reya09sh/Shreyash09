@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vote Count</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background-color: #9b59b6; /* Purple background */
+      color: white;
+    }
+
+    .results-container {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .result-item {
+      background: white;
+      color: black;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      width: 250px;
+      margin: 10px auto;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .voter-info-container {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      color: black;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .voter-info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .voter-info-table th, .voter-info-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .voter-info-table th {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .voter-info-table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .section-title {
+      color: #007BFF;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .vote-summary {
+      margin-top: 20px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-content">
+      <span class="brand">Vote Count</span>
+    </div>
+  </nav>
+
+  <div class="container center">
+    <h2 style="color:white;">Live Vote Count</h2>
+
+    <div class="results-container" id="voteResults">
+    </div>
+
+    <div class="vote-summary" id="voteSummary">
+    </div>
+    <div class="voter-info-container">
+      <h3 class="section-title">Detailed Voting Records</h3>
+      <table class="voter-info-table" id="voterInfoTable">
+        <thead>
+          <tr>
+            <th>Voter ID</th>
+            <th>Name</th>
+            <th>Party Voted</th>
+            <th>Time Voted</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div id="actionButtons" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+      <button id="backButton" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        ⬅ Back
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.href = "index.html";
+    }
+    const votes = JSON.parse(localStorage.getItem("votes")) || {};
+    const resultsDiv = document.getElementById("voteResults");
+    const voteRecords = JSON.parse(localStorage.getItem("voteRecords")) || [];
+    const totalVotes = Object.values(votes).reduce((sum, val) => sum + val, 0);
+    const parties = ['BJP', 'Congress', 'AAP', 'BSP'];
+    parties.forEach(party => {
+      const count = votes[party] || 0;
+      const percentage = totalVotes > 0 ? ((count / totalVotes) * 100).toFixed(1) : 0;
+      
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      div.innerHTML = `
+        <div>${party}: ${count} vote(s)</div>
+        <div>${percentage}% of total</div>
+      `;
+      resultsDiv.appendChild(div);
+    });
+
+    // Display summary
+    const summaryDiv = document.getElementById("voteSummary");
+    summaryDiv.textContent = `Total Votes Cast: ${totalVotes}`;
+
+    // Display detailed voting records
+    const voterTable = document.querySelector("#voterInfoTable tbody");
+    voterTable.innerHTML = "";
+
+    if (voteRecords.length === 0) {
+      voterTable.innerHTML = "<tr><td colspan='4'>No voting records available</td></tr>";
+    } else {
+      // Sort by timestamp (newest first)
+      voteRecords.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      voteRecords.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${record.voterId}</td>
+          <td>${record.firstName} ${record.lastName}</td>
+          <td>${record.party}</td>
+          <td>${new Date(record.timestamp).toLocaleString()}</td>
+        `;
+        voterTable.appendChild(row);
+      });
+    }
+
+    // Back button logic
+    document.getElementById('backButton').addEventListener('click', function () {
+      window.history.back();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Manage Candidates</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      padding-top: 60px;
+      background-color: #f0f0f0;
+    }
+
+    .admin-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+
+    .action-btn {
+      padding: 4px 8px;
+      margin: 2px;
+      cursor: pointer;
+    }
+
+    .add-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .edit-btn {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .back-btn {
+      background-color: #007BFF;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .center-btn-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .voter-link {
+      color: white;
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 15px;
+    }
+
+    .voter-link:hover {
+      color: #ffdd57;
+    }
+
+    /* Voter Table */
+    .voter-section {
+      margin-top: 40px;
+    }
+
+    .voter-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .voter-table th, .voter-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .voter-table th {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .section-title {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: #007BFF;
+      text-align: center;
+    }
+
+    /* Popup Modal */
+    #voterPanelPopup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      text-align: center;
+      z-index: 999;
+    }
+
+    #voterPanelPopupContent {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 100px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-content">
+      <span class="brand">Admin Panel - Manage Candidates
+        <span class="voter-link" id="voterPanelLink">| Voter Panel</span>
+      </span>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    <h2>Candidate List</h2>
+
+    <input type="text" id="newCandidate" placeholder="Enter candidate/party name" style="padding:8px; width:70%;">
+    <button class="add-btn action-btn" onclick="addCandidate()">Add Candidate</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Candidate Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="candidateTable">
+      </tbody>
+    </table>
+    <div class="center-btn-container">
+      <button id="backToLoginButton" class="back-btn">⬅ Back to Login</button>
+    </div>
+    <div class="voter-section" id="voterSection" style="display:none;">
+      <h3 class="section-title">Registered Voter Information</h3>
+      <table class="voter-table" id="voterTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Gender</th>
+            <th>DOB</th>
+            <th>Age</th>
+            <th>Voter ID</th>
+            <th>Aadhaar File</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div id="voterPanelPopup">
+    <div id="voterPanelPopupContent">
+      <h3>Enter Password to Access Voter Panel</h3>
+      <input type="password" id="voterPanelPassword" placeholder="Enter password" style="padding:10px; width:100%; margin-bottom:10px;">
+      <br>
+      <button onclick="checkVoterPanelPassword()" style="padding:8px 16px;">Submit</button>
+      <button onclick="closeVoterPanelPopup()" style="padding:8px 16px;">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    function loadCandidates() {
+      const defaultCandidates = ['BJP', 'Congress', 'AAP', 'BSP'];
+      const candidates = JSON.parse(localStorage.getItem('candidates')) || defaultCandidates;
+      localStorage.setItem('candidates', JSON.stringify(candidates)); 
+
+      const table = document.getElementById('candidateTable');
+      table.innerHTML = '';
+
+      candidates.forEach((name, index) => {
+        const row = `<tr>
+          <td>${name}</td>
+          <td>
+            <button class="edit-btn action-btn" onclick="editCandidate(${index})">Edit</button>
+            <button class="delete-btn action-btn" onclick="deleteCandidate(${index})">Delete</button>
+          </td>
+        </tr>`;
+        table.innerHTML += row;
+      });
+    }
+
+    function addCandidate() {
+      const newName = document.getElementById('newCandidate').value.trim();
+      if (newName === '') {
+        alert('Enter a valid candidate name.');
+        return;
+      }
+
+      const candidates = JSON.parse(localStorage.getItem('candidates')) || [];
+      candidates.push(newName);
+      localStorage.setItem('candidates', JSON.stringify(candidates));
+      document.getElementById('newCandidate').value = '';
+      loadCandidates();
+    }
+
+    function deleteCandidate(index) {
+      const candidates = JSON.parse(localStorage.getItem('candidates')) || [];
+      candidates.splice(index, 1);
+      localStorage.setItem('candidates', JSON.stringify(candidates));
+      loadCandidates();
+    }
+
+    function editCandidate(index) {
+      const candidates = JSON.parse(localStorage.getItem('candidates')) || [];
+      const newName = prompt('Edit candidate name:', candidates[index]);
+      if (newName && newName.trim() !== '') {
+        candidates[index] = newName.trim();
+        localStorage.setItem('candidates', JSON.stringify(candidates));
+        loadCandidates();
+      }
+    }
+
+    // Back to Login Button logic
+    document.getElementById('backToLoginButton').addEventListener('click', function() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = 'index.html';
+    });
+
+    // Voter Panel Popup functions
+    document.getElementById('voterPanelLink').addEventListener('click', function() {
+      document.getElementById('voterPanelPopup').style.display = 'block';
+    });
+
+    function closeVoterPanelPopup() {
+      document.getElementById('voterPanelPopup').style.display = 'none';
+      document.getElementById('voterPanelPassword').value = '';
+    }
+
+    function checkVoterPanelPassword() {
+      const password = document.getElementById('voterPanelPassword').value;
+      if (password === '2409') {
+        closeVoterPanelPopup();
+        showVoterPanel();
+      } else {
+        alert('Incorrect password');
+      }
+    }
+
+    // Show Voter Info Table
+    function showVoterPanel() {
+      document.getElementById('voterSection').style.display = 'block';
+      loadVoterTable();
+    }
+
+    function loadVoterTable() {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const tableBody = document.querySelector("#voterTable tbody");
+      tableBody.innerHTML = "";
+
+      users.forEach(user => {
+        const row = `
+          <tr>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.address}</td>
+            <td>${user.gender}</td>
+            <td>${user.dob}</td>
+            <td>${user.age}</td>
+            <td>${user.voterId}</td>
+            <td>${user.aadhaar.split('\\').pop()}</td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    // Initial load
+    loadCandidates();
+  </script>
+
+</body>
+</html>
