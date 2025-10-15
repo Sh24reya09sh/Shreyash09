@@ -23,7 +23,7 @@
 
 ###
 
-<p align="left">I’m a Third-year B.Sc. Information Technology student at Gogate Joglekar College (Autonomous), Ratnagiri. Enthusiastic about coding, web development, and continuously exploring new technologies.<br><br>🛠️ Tech Stack  <br>- Languages: Python, JavaScript, C,  C++,Bootstrap<br>- Frontend: HTML, CSS, JavaScript<br>- Backend: Python, MySQL  <br>- Tools: GitHub, VS Code, IDLE Python, Dev-C++<br><br>Gmail: shreyashsgurav10s@gmail.com<br>linkedin: www.linkedin.com/in/shreyash-gurav-b7a528296</p>
+<p align="left">I’m a Third-year B.Sc. Information Technology student at Gogate Joglekar College (Autonomous), Ratnagiri. Enthusiastic about coding, web development, and continuously exploring new technologies.<br><br>🛠️ Tech Stack  <br>- Languages: Python, JavaScript, C,  C++,Bootstrap , java , c# <br>- Frontend: HTML, CSS, JavaScript<br>- Backend: Python flask, MySQL  <br>- Tools: GitHub, VS Code, IDLE Python, Dev-C++<br><br>Gmail: shreyashsgurav10s@gmail.com<br>linkedin: www.linkedin.com/in/shreyash-gurav-b7a528296</p>
 
 ###
 
